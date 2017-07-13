@@ -40,4 +40,8 @@ public class MathService {
         }
         return output;
     }
+
+    public static String calcVolume(Volumes volume) {
+     return "The volume of a " + volume.getV1() + "x" + volume.getV2() + "x" + volume.getV3() + " rectangle is " + volume.getV1() * volume.getV2() * volume.getV3();
+    }
 }

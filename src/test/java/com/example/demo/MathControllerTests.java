@@ -70,4 +70,15 @@ public class MathControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(content().string("30 + 5 + 23 = 58"));
     }
+
+    @Test
+    public void testVolumeEndpoint() throws Exception {
+        int v1 = 3;
+        int v2 = 4;
+        int v3 = 5;
+
+        this.mvc.perform(get(String.format("/math/volume/%1$d/%2$d/%3$d", v1, v2, v3)))
+                .andExpect(status().isOk())
+                .andExpect(content().string("The volume of a 3x4x5 rectangle is 60"));
+    }
 }

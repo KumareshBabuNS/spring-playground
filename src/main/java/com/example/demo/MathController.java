@@ -25,4 +25,9 @@ public class MathController {
         return MathService.getSum(mapValues);
     }
 
+    @GetMapping(value={"/volume/{v1}/{v2}/{v3}", "/volume/{v1}/{v2}/{v3}/"})
+    public String getVolume(Volumes volume) {
+        return MathService.calcVolume(volume);
+    }
+
 }
