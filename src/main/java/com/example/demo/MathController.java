@@ -30,4 +30,8 @@ public class MathController {
         return MathService.calcVolume(volume);
     }
 
+    @PostMapping(value={"/area", "/area/"})
+    public String getArea(AreaObj areaObj) {
+        return MathService.calcArea(areaObj);
+    }
 }

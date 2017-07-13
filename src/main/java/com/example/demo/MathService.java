@@ -1,6 +1,9 @@
 package com.example.demo;
 
 import org.springframework.util.MultiValueMap;
+
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.List;
 
 import static java.lang.Integer.parseInt;
@@ -43,5 +46,15 @@ public class MathService {
 
     public static String calcVolume(Volumes volume) {
      return "The volume of a " + volume.getV1() + "x" + volume.getV2() + "x" + volume.getV3() + " rectangle is " + volume.getV1() * volume.getV2() * volume.getV3();
+    }
+
+    public static String calcArea(AreaObj areaObj) {
+        DecimalFormat df = new DecimalFormat("#.#####");
+        df.setRoundingMode(RoundingMode.FLOOR);
+
+        if (areaObj.getType().equals("circle")) {
+            return "Area of a circle with a radius of " + areaObj.getRadius() + " is " + df.format(Math.PI * Math.pow(areaObj.getRadius(), 2));
+        }
+        return "";
     }
 }
