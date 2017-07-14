@@ -34,4 +34,5 @@ public class MathController {
     public String postArea(AreaObj areaObj) {
         return MathService.calcArea(areaObj);
     }
+
 }
