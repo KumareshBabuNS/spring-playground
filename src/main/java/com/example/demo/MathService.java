@@ -12,7 +12,7 @@ import static java.lang.Integer.parseInt;
  * Created by taylorhessel on 6/26/17.
  */
 public class MathService {
-    public static String getCalcResult(CalculateInfo calcInfo) {
+    public static String calcResult(CalculateInfo calcInfo) {
         if (calcInfo.getOperation().equals("add")) {
             return calcInfo.getX() + " + " + calcInfo.getY() + " = " + (calcInfo.getX() + calcInfo.getY());
         } else if (calcInfo.getOperation().equals("multiply")) {
@@ -26,7 +26,7 @@ public class MathService {
         }
     }
 
-    public static String getSum(MultiValueMap<String, String> mapValues) {
+    public static String calcSum(MultiValueMap<String, String> mapValues) {
         String output = "";
         int i = 0;
         int sum = 0;

@@ -69,7 +69,7 @@ public class MathControllerTests {
 
     @Test
     public void testSumEndpoint() throws Exception {
-        this.mvc.perform(get("/math/sum?x=30&x=5&x=23"))
+        this.mvc.perform(post("/math/sum?x=30&x=5&x=23"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("30 + 5 + 23 = 58"));
     }

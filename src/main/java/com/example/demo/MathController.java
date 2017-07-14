@@ -17,12 +17,12 @@ public class MathController {
 
     @GetMapping(value={"/calculate", "/calculate/"})
     public String getResult(CalculateInfo calcInfo) {
-        return MathService.getCalcResult(calcInfo);
+        return MathService.calcResult(calcInfo);
     }
 
-    @GetMapping(value={"/sum", "/sum/"})
-    public String createSum(@RequestParam MultiValueMap<String, String> mapValues) {
-        return MathService.getSum(mapValues);
+    @PostMapping(value={"/sum", "/sum/"})
+    public String postSum(@RequestParam MultiValueMap<String, String> mapValues) {
+        return MathService.calcSum(mapValues);
     }
 
     @GetMapping(value={"/volume/{v1}/{v2}/{v3}", "/volume/{v1}/{v2}/{v3}/"})
@@ -31,7 +31,7 @@ public class MathController {
     }
 
     @PostMapping(value={"/area", "/area/"})
-    public String getArea(AreaObj areaObj) {
+    public String postArea(AreaObj areaObj) {
         return MathService.calcArea(areaObj);
     }
 }
