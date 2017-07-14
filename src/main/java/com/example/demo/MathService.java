@@ -52,9 +52,12 @@ public class MathService {
         DecimalFormat df = new DecimalFormat("#.#####");
         df.setRoundingMode(RoundingMode.FLOOR);
 
-        if (areaObj.getType().equals("circle")) {
+        if (areaObj.getType().equals("circle") && areaObj.getRadius() != null) {
             return "Area of a circle with a radius of " + areaObj.getRadius() + " is " + df.format(Math.PI * Math.pow(areaObj.getRadius(), 2));
+        } else if (areaObj.getType().equals("rectangle") && areaObj.getWidth() != null && areaObj.getHeight() != null) {
+            return "Area of a " + areaObj.getWidth() + "x" + areaObj.getHeight() + " rectangle is " + areaObj.getWidth() * areaObj.getHeight();
+        } else {
+            return "Invalid";
         }
-        return "";
     }
 }

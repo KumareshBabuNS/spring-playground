@@ -5,9 +5,9 @@ package com.example.demo;
  */
 public class AreaObj {
     private String type;
-    private int radius;
-    private int width;
-    private int height;
+    private Integer radius;
+    private Integer width;
+    private Integer height;
 
     public String getType() {
         return type;
@@ -17,27 +17,27 @@ public class AreaObj {
         this.type = type;
     }
 
-    public int getRadius() {
+    public Integer getRadius() {
         return radius;
     }
 
-    public void setRadius(int radius) {
+    public void setRadius(Integer radius) {
         this.radius = radius;
     }
 
-    public int getWidth() {
+    public Integer getWidth() {
         return width;
     }
 
-    public void setWidth(int width) {
+    public void setWidth(Integer width) {
         this.width = width;
     }
 
-    public int getHeight() {
+    public Integer getHeight() {
         return height;
     }
 
-    public void setHeight(int height) {
+    public void setHeight(Integer height) {
         this.height = height;
     }
 }
