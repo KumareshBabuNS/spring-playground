@@ -2,9 +2,9 @@ package com.example.demo;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
@@ -12,19 +12,34 @@ import java.util.Arrays;
 import java.util.List;
 
 @RestController
-@RequestMapping("/flights")
 public class FlightsController {
+    // Instantiate passengers
+    Flight.Ticket.Person passenger1 = new Flight.Ticket.Person("Steve", "Austin");
+    Flight.Ticket.Person passenger2 = new Flight.Ticket.Person("Dwayne", null);
 
-    @GetMapping(value={"/flight", "/flight/"})
+    // Instantiate tickets
+    Flight.Ticket ticket1 = new Flight.Ticket(passenger1, 200);
+    Flight.Ticket ticket2 = new Flight.Ticket(passenger2, 400);
+
+    // Instantiate arrays for tickets
+    Flight.Ticket[] ticketsArr1 = new Flight.Ticket[]{ticket1};
+    Flight.Ticket[] ticketsArr2 = new Flight.Ticket[]{ticket2};
+
+    //Instantiate flights
+    Flight flight1 = new Flight(LocalDateTime.of(2017, 4, 21, 14, 34), Arrays.asList(ticketsArr1));
+    Flight flight2 = new Flight(LocalDateTime.of(2017, 4, 21, 14, 34), Arrays.asList(ticketsArr2));
+
+    //List of flights
+    List<Flight> flights = Arrays.asList(flight1, flight2);
+
+    @GetMapping(value={"/flights", "/flights/"})
+    public List<Flight> getFlights() {
+        return flights;
+    }
+
+    @GetMapping(value={"/flights/flight", "/flights/flight/"})
     public Flight getIndividualFlight() {
-        Flight.Ticket.Person passenger1 = new Flight.Ticket.Person("Steve", "Austin");
-
-        Flight.Ticket ticket1 = new Flight.Ticket(passenger1, 200);
-
-        Flight.Ticket[] ticketsArr = new Flight.Ticket[]{ticket1};
-        Flight flight = new Flight(LocalDateTime.of(2017, 4, 21, 14, 34), Arrays.asList(ticketsArr));
-
-        return flight;
+        return flights.get(0);
     }
 
     static class Flight {
@@ -33,14 +48,15 @@ public class FlightsController {
 
         @JsonCreator
         Flight(
-                @JsonProperty("departs") LocalDateTime departs,
-                @JsonProperty("tickets") List<Ticket> tickets
+                @JsonProperty("Departs") LocalDateTime departs,
+                @JsonProperty("Tickets") List<Ticket> tickets
         ) {
             this.departs = departs;
             this.tickets = tickets;
         }
 
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+        @JsonProperty("Departs")
         public LocalDateTime getDeparts() {
             return departs;
         }
@@ -49,6 +65,7 @@ public class FlightsController {
             this.departs = departs;
         }
 
+        @JsonProperty("Tickets")
         public List<Ticket> getTickets() {
             return tickets;
         }
@@ -63,13 +80,14 @@ public class FlightsController {
 
             @JsonCreator
             Ticket(
-                    @JsonProperty("passenger") Person passenger,
-                    @JsonProperty("price") int price
+                    @JsonProperty("Passenger") Person passenger,
+                    @JsonProperty("Price") int price
             ) {
                 this.passenger = passenger;
                 this.price = price;
             }
 
+            @JsonProperty("Passenger")
             public Person getPassenger() {
                 return passenger;
             }
@@ -78,6 +96,7 @@ public class FlightsController {
                 this.passenger = passenger;
             }
 
+            @JsonProperty("Price")
             public int getPrice() {
                 return price;
             }
@@ -86,19 +105,21 @@ public class FlightsController {
                 this.price = price;
             }
 
+            @JsonInclude(JsonInclude.Include.NON_NULL)
             static class Person {
                 private String firstName;
                 private String lastName;
 
                 @JsonCreator
                 Person(
-                        @JsonProperty("firstName") String firstName,
-                        @JsonProperty("lastName") String lastName
+                        @JsonProperty("FirstName") String firstName,
+                        @JsonProperty("LastName") String lastName
                 ) {
                     this.firstName = firstName;
                     this.lastName = lastName;
                 }
 
+                @JsonProperty("FirstName")
                 public String getFirstName() {
                     return firstName;
                 }
@@ -107,6 +128,7 @@ public class FlightsController {
                     this.firstName = firstName;
                 }
 
+                @JsonProperty("LastName")
                 public String getLastName() {
                     return lastName;
                 }
