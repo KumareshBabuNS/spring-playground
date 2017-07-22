@@ -10,9 +10,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -97,7 +94,8 @@ public class FlightsControllerTests {
 
     @Test
     public void testTotalEndpointFileFixture() throws Exception {
-        String json = getJSON("/data.json");
+        JsonService jsonService = new JsonService();
+        String json = jsonService.getJSON("/data.json");
 
         MockHttpServletRequestBuilder request = post("/flights/tickets/total")
                 .accept(MediaType.APPLICATION_JSON)
@@ -109,8 +107,4 @@ public class FlightsControllerTests {
                 .andExpect(jsonPath("$.result", is(555)));
     }
 
-    private String getJSON(String path) throws Exception {
-        URL url = this.getClass().getResource(path);
-        return new String(Files.readAllBytes(Paths.get(url.getFile())));
-    }
 }
