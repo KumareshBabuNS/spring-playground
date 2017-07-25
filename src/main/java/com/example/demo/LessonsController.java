@@ -1,47 +1,47 @@
 package com.example.demo;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/lessons")
 class LessonsController {
 
-    private final LessonRepository lessonRepository;
-
-    LessonsController(LessonRepository lessonRepository) {
-        this.lessonRepository = lessonRepository;
-    }
+    @Autowired
+    LessonRepository lessonRepository;
 
     // CREATE
     @PostMapping("")
     Lesson create(@RequestBody Lesson lesson) {
-        return this.lessonRepository.save(lesson);
+        return lessonRepository.save(lesson);
     }
 
     // READ
     @GetMapping("/{id}")
     Lesson one(@PathVariable Long id) {
-        return this.lessonRepository.findOne(id);
+        return lessonRepository.findOne(id);
     }
 
-    // UPDATE, if the request body doesn't have an id that matches an already existing id
-    // in the DB, a new entity will be added with the next available sequential id.
-    // Your request body better be accurate.
+    // UPDATE
     @PatchMapping("/{id}")
-    Lesson update(@RequestBody Lesson lesson) {
-        return this.lessonRepository.save(lesson);
+    Lesson update(@PathVariable Long id, @RequestBody Lesson lesson) {
+        Lesson lessonEntity = lessonRepository.findOne(id);
+        lessonEntity.setTitle(lesson.getTitle());
+        lessonEntity.setDeliveredOn(lesson.getDeliveredOn());
+
+        return lessonRepository.save(lessonEntity);
     }
 
     // DELETE
     @DeleteMapping("/{id}")
     void delete(@PathVariable Long id) {
-        this.lessonRepository.delete(id);
+        lessonRepository.delete(id);
     }
 
     // LIST
     @GetMapping("")
     Iterable<Lesson> all() {
-        return this.lessonRepository.findAll();
+        return lessonRepository.findAll();
     }
 
 }

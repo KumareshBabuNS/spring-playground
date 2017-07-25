@@ -14,10 +14,14 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import javax.transaction.Transactional;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
+import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -54,26 +58,62 @@ public class LessonsControllerTests {
     @Transactional
     @Rollback
     public void testRead() throws Exception {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
         Lesson lesson = new Lesson();
         lesson.setTitle("read test");
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = sdf.parse("2017-07-25");
-
-        lesson.setDeliveredOn(new Date(date.getTime()));
+        lesson.setDeliveredOn(new Date(sdf.parse("2017-07-25").getTime()));
         lessonRepository.save(lesson);
 
         int id = 1;
 
-        MockHttpServletRequestBuilder request = get(String.format("/lessons/%1$d", id))
+        MockHttpServletRequestBuilder request = get(String.format("/lessons/%d", id))
                 .contentType(MediaType.APPLICATION_JSON);
 
         this.mvc.perform(request)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", instanceOf(Number.class)))
-                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.id", equalTo(id)))
                 .andExpect(jsonPath("$.title", is("read test")))
                 .andExpect(jsonPath("$.deliveredOn", is("2017-07-25")));
+
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void testUpdate() throws Exception {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        Lesson lesson1 = new Lesson();
+        lesson1.setTitle("lesson 1 title");
+        lesson1.setDeliveredOn(new Date(sdf.parse("2017-07-25").getTime()));
+
+        Lesson lesson2 = new Lesson();
+        lesson2.setTitle("lesson 2 title");
+        lesson2.setDeliveredOn(new Date(sdf.parse("2017-07-29").getTime()));
+
+        Lesson lesson3 = new Lesson();
+        lesson3.setTitle("lesson 3 title");
+        lesson3.setDeliveredOn(new Date(sdf.parse("2017-07-31").getTime()));
+
+        List<Lesson> lessons = Arrays.asList(lesson1, lesson2, lesson3);
+
+        lessonRepository.save(lessons);
+
+        int id = 5;
+
+        MockHttpServletRequestBuilder request = patch(String.format("/lessons/%d", id))
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"title\": \"I don't get it\", \"deliveredOn\": \"2017-08-28\"}");
+
+        this.mvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", instanceOf(Number.class)))
+                .andExpect(jsonPath("$.id", equalTo(id)))
+                .andExpect(jsonPath("$.title", is("I don't get it")))
+                .andExpect(jsonPath("$.deliveredOn", is("2017-08-28")));
 
     }
 
