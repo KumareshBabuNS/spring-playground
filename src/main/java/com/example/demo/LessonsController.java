@@ -4,23 +4,23 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/lessons")
-public class LessonsController {
+class LessonsController {
 
     private final LessonRepository lessonRepository;
 
-    public LessonsController(LessonRepository lessonRepository) {
+    LessonsController(LessonRepository lessonRepository) {
         this.lessonRepository = lessonRepository;
     }
 
     // CREATE
     @PostMapping("")
-    public Lesson create(@RequestBody Lesson lesson) {
+    Lesson create(@RequestBody Lesson lesson) {
         return this.lessonRepository.save(lesson);
     }
 
     // READ
     @GetMapping("/{id}")
-    public Lesson one(@PathVariable Long id) {
+    Lesson one(@PathVariable Long id) {
         return this.lessonRepository.findOne(id);
     }
 
@@ -28,19 +28,19 @@ public class LessonsController {
     // in the DB, a new entity will be added with the next available sequential id.
     // Your request body better be accurate.
     @PatchMapping("/{id}")
-    public Lesson update(@RequestBody Lesson lesson) {
+    Lesson update(@RequestBody Lesson lesson) {
         return this.lessonRepository.save(lesson);
     }
 
     // DELETE
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    void delete(@PathVariable Long id) {
         this.lessonRepository.delete(id);
     }
 
     // LIST
     @GetMapping("")
-    public Iterable<Lesson> all() {
+    Iterable<Lesson> all() {
         return this.lessonRepository.findAll();
     }
 
