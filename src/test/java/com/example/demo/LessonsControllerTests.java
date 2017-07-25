@@ -106,13 +106,13 @@ public class LessonsControllerTests {
         MockHttpServletRequestBuilder request = patch(String.format("/lessons/%d", id))
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"title\": \"I don't get it\", \"deliveredOn\": \"2017-08-28\"}");
+                .content("{\"title\": \"updated title\", \"deliveredOn\": \"2017-08-28\"}");
 
         this.mvc.perform(request)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", instanceOf(Number.class)))
                 .andExpect(jsonPath("$.id", equalTo(id)))
-                .andExpect(jsonPath("$.title", is("I don't get it")))
+                .andExpect(jsonPath("$.title", is("updated title")))
                 .andExpect(jsonPath("$.deliveredOn", is("2017-08-28")));
 
     }
