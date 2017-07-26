@@ -101,7 +101,7 @@ public class LessonsControllerTests {
 
         lessonRepository.save(lessons);
 
-        int id = 5;
+        int id = 8;
 
         MockHttpServletRequestBuilder request = patch(String.format("/lessons/%d", id))
                 .accept(MediaType.APPLICATION_JSON)
@@ -115,6 +115,73 @@ public class LessonsControllerTests {
                 .andExpect(jsonPath("$.title", is("updated title")))
                 .andExpect(jsonPath("$.deliveredOn", is("2017-08-28")));
 
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void testFindByTitle() throws Exception {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        Lesson lesson = new Lesson();
+        lesson.setTitle("find this title");
+        lesson.setDeliveredOn(new Date(sdf.parse("2017-07-26").getTime()));
+
+        lessonRepository.save(lesson);
+
+        String lessonTitle = lesson.getTitle();
+
+        MockHttpServletRequestBuilder request = get(String.format("/lessons/find/%s", lessonTitle))
+                .contentType(MediaType.APPLICATION_JSON);
+
+        this.mvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", instanceOf(Number.class)))
+                .andExpect(jsonPath("$.title", is("find this title")))
+                .andExpect(jsonPath("$.deliveredOn", is("2017-07-26")));
+
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void testFindBetween() throws Exception {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        Lesson lesson1 = new Lesson();
+        lesson1.setTitle("lesson 1 title");
+        lesson1.setDeliveredOn(new Date(sdf.parse("2017-07-25").getTime()));
+
+        Lesson lesson2 = new Lesson();
+        lesson2.setTitle("lesson 2 title");
+        lesson2.setDeliveredOn(new Date(sdf.parse("2017-07-29").getTime()));
+
+        Lesson lesson3 = new Lesson();
+        lesson3.setTitle("lesson 3 title");
+        lesson3.setDeliveredOn(new Date(sdf.parse("2017-07-31").getTime()));
+
+        Lesson lesson4 = new Lesson();
+        lesson4.setTitle("lesson 4 title");
+        lesson4.setDeliveredOn(new Date(sdf.parse("2017-08-06").getTime()));
+
+        List<Lesson> lessons = Arrays.asList(lesson1, lesson2, lesson3, lesson4);
+
+        lessonRepository.save(lessons);
+
+        String date1 = "2017-07-27";
+        String date2 = "2017-08-01";
+
+        MockHttpServletRequestBuilder request = get(String.format("/lessons/between?date1=%1$s&date2=%2$s", date1, date2))
+                .contentType(MediaType.APPLICATION_JSON);
+
+        this.mvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id", instanceOf(Number.class)))
+                .andExpect(jsonPath("$[0].title", is("lesson 2 title")))
+                .andExpect(jsonPath("$[0].deliveredOn", is("2017-07-29")))
+                .andExpect(jsonPath("$[1].id", instanceOf(Number.class)))
+                .andExpect(jsonPath("$[1].title", is("lesson 3 title")))
+                .andExpect(jsonPath("$[1].deliveredOn", is("2017-07-31")));
     }
 
 }

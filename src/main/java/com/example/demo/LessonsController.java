@@ -3,6 +3,12 @@ package com.example.demo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
 @RestController
 @RequestMapping("/lessons")
 class LessonsController {
@@ -42,6 +48,28 @@ class LessonsController {
     @GetMapping("")
     Iterable<Lesson> all() {
         return lessonRepository.findAll();
+    }
+
+    // FIND BY TITLE
+    @GetMapping("/find/{title}")
+    Lesson byTitle(@PathVariable String title) {
+        return lessonRepository.findByTitle(title);
+    }
+
+    // FIND BETWEEN DATES
+    @GetMapping("/between")
+    Iterable<Lesson> betweenDates(@RequestParam String date1, @RequestParam String date2) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        try {
+            return lessonRepository.findLessonsBetween(new Date(sdf.parse(date1).getTime()), new Date(sdf.parse(date2).getTime()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        List<Lesson> lessons = Arrays.asList();
+
+        return lessons;
     }
 
 }
