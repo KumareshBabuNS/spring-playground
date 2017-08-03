@@ -1,21 +1,28 @@
 package com.example.demo;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static org.junit.Assert.*;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class WordCounterTest {
 
+    @Autowired
+    private WordCounter counter;
+
     @Test
-    public void count() throws Exception {
-        WordCounter counter = new WordCounter();
-        Map result = counter.count("the quick brown fox, rupert, jumped over the brown dog!");
+    public void testCount() throws Exception {
+        Map result = this.counter.count("the quick brown fox, rupert, jumped over the brown dog!");
         Map<String, Integer> testInput = new LinkedHashMap<String, Integer>(){
             {
-                put("the", 2);
                 put("quick", 1);
                 put("brown", 2);
                 put("fox", 1);

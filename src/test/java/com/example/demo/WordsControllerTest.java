@@ -29,7 +29,7 @@ public class WordsControllerTest {
             }
         };
 
-        assertEquals(testInput, controller.postWordCount(requestBody));
+        assertEquals(testInput, this.controller.postWordCount(requestBody));
     }
 
 }
