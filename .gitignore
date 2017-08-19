@@ -2,6 +2,7 @@
 /build/
 !gradle/wrapper/gradle-wrapper.jar
 /src/main/resources/omdb.properties
+/src/test/resources/omdb.properties
 
 ### STS ###
 .apt_generated
