@@ -17,17 +17,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         http.csrf().disable();
         http.httpBasic();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authorizeRequests().mvcMatchers("/flights/**", "/math/**", "/", "/lessons/**", "/movies/**", "/words/**").permitAll();
-        http.authorizeRequests().anyRequest().authenticated();
+        http.authorizeRequests()
+                .antMatchers("/flights/**", "/math/**", "/", "/lessons/**", "/movies/**", "/words/**").permitAll()
+                .antMatchers("/admin/employees").hasRole("MANAGER")
+                .antMatchers("/admin").hasRole("ADMIN")
+                .antMatchers("/employees").authenticated()
+                .anyRequest().authenticated();
     }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth
                 .inMemoryAuthentication()
-                .withUser("employee").password("abc123").roles("EMPLOYEE")
+                .withUser("employee").password("abc123").roles("USER")
                 .and()
-                .withUser("boss").password("def456").roles("MANAGER");
+                .withUser("boss").password("def456").roles("MANAGER")
+                .and()
+                .withUser("admin").password("admin").roles("ADMIN");
     }
 
 }

@@ -1,7 +1,5 @@
 package com.example.demo.lesson;
 
-import com.example.demo.lesson.Lesson;
-import com.example.demo.lesson.LessonRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

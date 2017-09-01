@@ -6,17 +6,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/employees")
-public class EmployeesController {
+@RequestMapping("/admin")
+public class AdminController {
 
     private final EmployeeRepository repo;
 
-    public EmployeesController(EmployeeRepository employeeRepository) {
-        this.repo = employeeRepository;
+    public AdminController(EmployeeRepository repo) {
+        this.repo = repo;
     }
 
-    @GetMapping("")
-    @JsonView(Views.UserView.class)
+    @GetMapping("/employees")
+    @JsonView(Views.AdminView.class)
     public Iterable<Employee> list() {
         return repo.findAll();
     }
