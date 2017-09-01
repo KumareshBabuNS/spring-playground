@@ -17,14 +17,29 @@ public class DemoApplication {
 
 	@Bean
 	@Profile("dev")
-	public CommandLineRunner seedData(EmployeeRepository employeeRepository) {
+	public CommandLineRunner seedData(EmployeeRepository repo) {
+
 		return (args) -> {
-			employeeRepository.deleteAll();
+
+			repo.deleteAll();
 			Employee employee = new Employee();
 			employee.setName("Bo Diddly");
 			employee.setSalary(24000);
-			employeeRepository.save(employee);
+			employee.setUsername("bodiddly");
+			employee.setPassword("bodiddles");
+			employee.setRole("EMPLOYEE");
+			repo.save(employee);
+
+			Employee boss = new Employee();
+			boss.setName("Boss Hog");
+			boss.setSalary(48000);
+			boss.setUsername("bosshog");
+			boss.setPassword("hogboss");
+			boss.setRole("MANAGER");
+			repo.save(boss);
+
 		};
+
 	}
 
 }

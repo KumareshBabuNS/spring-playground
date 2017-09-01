@@ -1,6 +1,6 @@
 package com.example.demo.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.demo.employee.EmployeeDetailsService;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,6 +11,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
+
+    private final EmployeeDetailsService employeeDetailsService;
+
+    public SecurityConfig(EmployeeDetailsService employeeDetailsService) {
+        this.employeeDetailsService = employeeDetailsService;
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -25,15 +31,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .anyRequest().authenticated();
     }
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-                .inMemoryAuthentication()
-                .withUser("employee").password("abc123").roles("USER")
-                .and()
-                .withUser("boss").password("def456").roles("MANAGER")
-                .and()
-                .withUser("admin").password("admin").roles("ADMIN");
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(employeeDetailsService);
     }
 
 }
